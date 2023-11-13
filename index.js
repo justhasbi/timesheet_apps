@@ -1,7 +1,11 @@
+
 import app from "./src/app.js"
 import { config } from "./src/configs/config.js"
 import { sequelizeDbInit } from "./src/models/index.js"
+import dotenv from "dotenv"
+dotenv.config();
 
+const {PORT} = process.env || 6001;
 try {
     console.log('Checking database connection...')
     await sequelizeDbInit.authenticate()
@@ -12,6 +16,6 @@ try {
     process.exit(1)
 }
 
-app.listen(config.port, ()=> {
-    console.log(`Server is running htt://localhost:${config.port}.`);
+app.listen(PORT, ()=> {
+    console.log(`Server is running http://localhost:${config.port}.`);
 })

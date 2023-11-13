@@ -3,25 +3,25 @@ import initModels from "./init-models.js";
 import { config } from "../configs/config.js";
 
 const sequelizeDbInit = new Sequelize(
-    config.dbname,
-    config.username,
-    config.password, 
+    config.DB,
+    config.USER,
+    config.PASSWORD, 
     { 
         dialect: 'mysql', 
-        host: config.host, 
+        host: config.HOST, 
         port: config.port
     }
 );
 
 console.log(
     { 
-        dbname: config.dbname,
-        username: config.username,
-        password: config.password, 
+        dbname: config.DB,
+        username: config.USER,
+        password: config.PASSWORD, 
         option: { 
             dialect: 'mysql', 
-            host: config.dbhost,
-            port: config.dbport
+            host: config.HOST,
+            port: config.port
         }
     }
 )

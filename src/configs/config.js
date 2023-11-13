@@ -2,10 +2,10 @@ import dotenv from "dotenv"
 dotenv.config()
 
 export const config = { 
-    port: process.env.PORT,
-    dbname: process.env.DATABASE_NAME,
-    username: process.env.DATABASE_USERNAME,
-    password: process.env.DATABASE_PASSWORD, 
-    dbhost: process.env.DB_HOST, 
-    dbport: process.env.DB_PORT
+    //port: process.env.PORT,
+    DB: process.env.DATABASE_NAME,
+    USER: process.env.DATABASE_USERNAME,
+    PASSWORD: process.env.DATABASE_PASSWORD, 
+    HOST: process.env.DB_HOST, 
+    port: process.env.DB_PORT
 }
