@@ -95,3 +95,59 @@ export const loginAccount = async (req = request, res = response) => {
     
 }
 
+// change password account
+export const changePasswordAccount = async (req = request, res = response) => {
+    try {
+        const {account_id} = await req.params;
+        const {
+            password
+        } = await req.body;
+
+        const salt = await bcrypt.genSalt();
+        const newPassword = await bcrypt.hash(password, salt);
+
+        const changePassword = await Account.update(
+            {
+                password: newPassword,
+                created_at: Date.now(),
+                updated_at: Date.now()
+            },
+            {
+                where: {
+                    account_id: account_id,
+                }
+            }
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Password changed",
+            data: changePassword
+        });
+
+    } catch (error) {
+        return res.status(501).json({
+            success: false,
+            message: error.message
+        });
+    }
+} 
+
+//logout 
+// export const logout = async (req, res = response) => {
+//     try {
+//         req.session.destroy(() => {
+//             res.redirect("/login");
+//         });
+
+//         return res.status(200).json({
+//             success: true,
+//             message: 'Logged out'
+//         });
+//     } catch (error) {
+//         return res.status(501).json({
+//             success: false,
+//             message: error.message
+//         });
+//     }
+// }

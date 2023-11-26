@@ -1,6 +1,7 @@
 import express from "express";
 import account_route from "./accountRoute.js";
 import user_route from "./userRoute.js";
+import department_route from "./Department/departmentRoute.js";
 
 const noderouter = express.Router();
 
@@ -12,6 +13,10 @@ const defaultRoutes = [
     {
         path: '/user',
         route: user_route
+    },
+    {
+        path: '/department',
+        route: department_route
     }
 ];
 

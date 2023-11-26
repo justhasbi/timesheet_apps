@@ -1,5 +1,6 @@
 // http handler disini
-export {createAccount, loginAccount} from "./Auth/authController.js";
-export {getAccounts} from "./Account/accountController.js"
+export {createAccount, loginAccount, changePasswordAccount} from "./Auth/authController.js";
+export {getAccounts, getAccountById} from "./Account/accountController.js";
+export {createDepartment, getAllDepartments, getDepartment, updateDepartment} from "./Department/departmentController.js";
 
 

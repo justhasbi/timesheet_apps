@@ -2,15 +2,16 @@ import jwt from 'jsonwebtoken';
 import { request, response } from 'express';
 
 //Authorization
-export const verifyToken = async (req = request, res = response) => {
+export const verifyToken = async (req = request, res = response, next) => {
     try {
-        let token = req.headers("Authorization");
+        let token = req.header("Authorization");
+        console.log(token);
 
         if(!token){
             return res.status(403).send("Access Denied");
         }
 
-        if(token.startWith("Bearer")){
+        if(token.startsWith("Bearer ")){
             token = token.slice(7, token.length).trimLeft();
         }
         const {JWT_SECRET} = process.env;
@@ -19,7 +20,7 @@ export const verifyToken = async (req = request, res = response) => {
         // eslint-disable-next-line no-undef
         next();
     } catch (error) {
-        return res.status.json({
+        return res.status(501).json({
             success: false,
             error: error.message
         })
