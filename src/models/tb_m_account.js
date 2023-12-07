@@ -1,55 +1,56 @@
-export default function (sequelize, DataTypes) {
+//const Sequelize = require('sequelize');
+export default function(sequelize, DataTypes) {
   return sequelize.define('tb_m_account', {
     account_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     username: {
       type: DataTypes.STRING(50),
-      allowNull: false,
+      allowNull: false
     },
     password: {
       type: DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: false
     },
     hash: {
       type: DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: false
     },
     salt: {
       type: DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: false
     },
     employee_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'tb_m_employee',
-        key: 'employee_id',
-      },
-    },
+        key: 'employee_id'
+      }
+    }
   }, {
     sequelize,
     tableName: 'tb_m_account',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
-        name: 'PRIMARY',
+        name: "PRIMARY",
         unique: true,
-        using: 'BTREE',
+        using: "BTREE",
         fields: [
-          { name: 'account_id' },
-        ],
+          { name: "account_id" },
+        ]
       },
       {
-        name: 'employee_id',
-        using: 'BTREE',
+        name: "employee_id",
+        using: "BTREE",
         fields: [
-          { name: 'employee_id' },
-        ],
+          { name: "employee_id" },
+        ]
       },
-    ],
+    ]
   });
 }

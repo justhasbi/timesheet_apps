@@ -13,7 +13,7 @@ export const createDepartment = async (req = request, res = response) => {
             where: {department_name}
         });
 
-        console.log(departmentNameValidation.department_name);
+        //console.log(departmentNameValidation.department_name);
 
         if(departmentNameValidation > 0) {
             return res.status(403).json({
@@ -75,7 +75,7 @@ export const getDepartment = async (req = request, res = response) => {
         const department = await Department.findOne({
             where: {department_id}
         });
-        console.log(department)
+        //console.log(department)
         if (department === null ) {
             return res.status(404).json({
                 success: false,
@@ -126,6 +126,34 @@ export const updateDepartment = async (req = request, res = response) => {
             success: true,
             message: "Department updated successfully",
             data: updatedDepartment
+        });
+    } catch (error) {
+        return res.status(501).json({
+            success: false,
+            message: error.message
+        });    
+    }
+}
+
+//delete department
+export const deleteDepartment = async (req = request, res = response) => {
+    try {
+        const {department_id} = await req.params;
+
+        const deletedDepartment = await Department.destroy({
+            where: {department_id}
+        });   
+
+        if(deletedDepartment === 0){
+            return res.status(404).json({
+                success: false,
+                message: 'Department not found'
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Department has deleted'
         });
     } catch (error) {
         return res.status(501).json({

@@ -1,29 +1,29 @@
-
-export default function (sequelize, DataTypes) {
+//const Sequelize = require('sequelize');
+export default function(sequelize, DataTypes) {
   return sequelize.define('tb_m_roles', {
     role_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     role_name: {
       type: DataTypes.STRING(50),
-      allowNull: false,
-    },
+      allowNull: false
+    }
   }, {
     sequelize,
     tableName: 'tb_m_roles',
     timestamps: false,
     indexes: [
       {
-        name: 'PRIMARY',
+        name: "PRIMARY",
         unique: true,
-        using: 'BTREE',
+        using: "BTREE",
         fields: [
-          { name: 'role_id' },
-        ],
+          { name: "role_id" },
+        ]
       },
-    ],
+    ]
   });
 }
