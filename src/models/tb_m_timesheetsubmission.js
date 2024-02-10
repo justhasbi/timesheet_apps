@@ -8,7 +8,7 @@ export default function(sequelize, DataTypes) {
       primaryKey: true
     },
     submission_status: {
-      type: DataTypes.ENUM('Approve','Reject'),
+      type: DataTypes.ENUM('Approve','Reject',''),
       allowNull: false
     },
     information: {

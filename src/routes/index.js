@@ -4,6 +4,7 @@ import user_route from "./userRoute.js";
 import department_route from "./Department/departmentRoute.js";
 import employee_route from "./Employee/employeeRoute.js";
 import role_route from "./Role/roleRoute.js";
+import submission_route from "./Timesheet/timesheetSubRoute.js"
 
 const noderouter = express.Router();
 
@@ -28,6 +29,10 @@ const defaultRoutes = [
         path: '/role',
         route: role_route
     },
+    {
+        path: '/submission',
+        route: submission_route
+    }
 ];
 
 defaultRoutes.forEach((route) => {

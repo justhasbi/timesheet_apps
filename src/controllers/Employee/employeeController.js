@@ -5,7 +5,16 @@ const Employee = model.tb_m_employee;
 
 export const createEmployee = async (req = request, res = response) => {
     try {
-        const {name, email, address, birth_date, join_date, manager_id, department_id, role_id} = await req.body;
+        const {
+            name, 
+            email, 
+            address, 
+            birth_date, 
+            join_date, 
+            manager_id, 
+            department_id, 
+            role_id
+        } = await req.body;
 
         const employee = await Employee.create({
             name,

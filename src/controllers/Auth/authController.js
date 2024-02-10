@@ -17,6 +17,15 @@ export const createAccount = async (req = request, res = response) => {
         const salt = await bcrypt.genSalt();
         const passwordHash = await bcrypt.hash(password, salt);
         const employee = await Employee.findByPk(employee_id);
+        const employeeIdValidation = await Employee.count({
+            where: {employee_id}
+        })
+        if(employeeIdValidation > 0){
+            return res.status(403).json({
+                success: false,
+                message: "Employee has account"
+            });
+        }
         
         const createdAccount = await Account.create({
             username,
