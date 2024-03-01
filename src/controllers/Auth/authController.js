@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 
 const Account = model.tb_m_account;
 const Employee = model.tb_m_employee;
+const Role = model.tb_m_roles;
 
 export const createAccount = async (req = request, res = response) => {
     try {
@@ -17,13 +18,16 @@ export const createAccount = async (req = request, res = response) => {
         const salt = await bcrypt.genSalt();
         const passwordHash = await bcrypt.hash(password, salt);
         const employee = await Employee.findByPk(employee_id);
-        const employeeIdValidation = await Employee.count({
-            where: {employee_id}
-        })
-        if(employeeIdValidation > 0){
+
+        // Check if employee already has an account
+        const existingAccount = await Account.findOne({
+            where: { employee_id }
+        });
+        
+        if (existingAccount) {
             return res.status(403).json({
                 success: false,
-                message: "Employee has account"
+                message: "Employee already has an account"
             });
         }
         
@@ -80,14 +84,20 @@ export const loginAccount = async (req = request, res = response) => {
                 employee_id: accountUser.employee_id
             }
         });
-
+        const roleEmployee = await Role.findOne({
+            where: {
+                role_id: employeeName.role_id
+            }
+        });
         console.log(employeeName);
 
         const {JWT_SECRET} = process.env;
         const token = jwt.sign({
             username: accountUser.username, 
             employee: employeeName.name,
-            email: employeeName.email
+            email: employeeName.email,
+            role_id: employeeName.role_id,
+            role: roleEmployee.role_name
         }, JWT_SECRET);
 
         return res.status(200).json({
