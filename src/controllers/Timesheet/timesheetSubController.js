@@ -23,7 +23,7 @@ export const createSubmission = async (req = request, res = response) => {
         });
         console.log(timesheetIdValidation);
 
-        if(timesheetIdValidation > 0){
+        if(timesheetIdValidation > 0){  
             return res.status(409).json({
                 success: false,
                 message: "Timesheet has already been registered"
