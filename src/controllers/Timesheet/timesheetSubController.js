@@ -58,7 +58,53 @@ export const createSubmission = async (req = request, res = response) => {
     }
 }
 
+// View submission timesheet
+export const getAllSubmissionTimesheet = async (req, res = response) => {
+    try {
 
+        const submissionTimesheet = await TimesheetSubs.findAll({
+            include: [
+                {
+                    model: Manager,
+                    as: 'manager',
+                    attributes: ['employee_id', 'name'] 
+                },
+                {
+                    model: Timesheet,
+                    as: 'timesheet',
+                    include: [
+                        {
+                            model: Manager,
+                            as: 'employee',
+                            attributes: ['employee_id', 'name']
+                        }
+                    ]
+                }
+            ],
+            order: [
+                ['timesheet_submission_id','DESC']
+            ]
+        });
+        // jika submission 0 atau tidak ada
+        if(submissionTimesheet.length == 0){
+            return res.status(404).json({
+                success: false,
+                message: 'Submission timesheet not found'
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Data found",
+            data: submissionTimesheet
+        });
+    } catch (error) {
+        return res.status(501).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
 
 // Update Approve timesheet 
 export const approveTimesheet = async (req = request, res = response) => {
@@ -148,7 +194,85 @@ export const approveTimesheet = async (req = request, res = response) => {
     }
 }
 
+// Update Reject Timesheet 
+export const rejectTimesheet = async (req = request, res = response) => {
+    try {
+        //manager_id = employee_id ini dikarenakan agar kondisinya jika role bukan sama dengan manager maka tidak bisa reject 
+        const {timesheet_submission_id, timesheet_id, manager_id} = req.params;
+        const {information} = req.body;    
 
+        const timesheetSubsValidation = await TimesheetSubs.findByPk(timesheet_submission_id);
+        const timesheetIdValidation = await Timesheet.findByPk(timesheet_id);
+        const managerIdValidation = await Manager.findByPk(manager_id);
+
+        if(managerIdValidation.role_id === 2){
+            if(!timesheetSubsValidation){
+                return res.status(501).json({
+                    success: false,
+                    message: "Timesheet Submission not found"
+                });
+            }
+            if(!timesheetIdValidation) {
+                return res.status(501).json({
+                    success: false,
+                    message: "Timesheet not found"
+                });
+            }
+            // if(managerIdValidation == null || managerIdValidation === 0){
+            //     return res.status(501).json({
+            //         success: false,
+            //         message: "Manager not found"
+            //     });
+            // }
+            // Logic detail ketika timesheet sudah di approve maka tidak bisa di approve ulang
+            console.log('Ini status ' + timesheetIdValidation.status);
+            if(timesheetIdValidation.status === 'Reject'){
+                return res.status().json({
+                    success: false,
+                    message: "Timesheet has been reject"
+                });
+            }
+    
+    
+            const rejectedTimesheet = await TimesheetSubs.update(
+                {
+                    information,
+                    submission_status: "Reject"
+                },
+                {
+                    
+                    where: {timesheet_submission_id, timesheet_id, manager_id}
+                }
+            );
+    
+            await Timesheet.update(
+                {
+                    status: "Rejected"
+                },
+                {
+                    where: {timesheet_id}
+                }
+            );
+    
+            return res.status(200).json({
+                success: true,
+                message: "Updated Timesheet",
+                data: rejectedTimesheet
+            });
+        }else{
+            return res.status(501).json({
+                success: false,
+                message: "You are not allowed to reject a Timesheet"
+            });
+        }
+
+    } catch (error) {
+        return res.status(501).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
 
 
 
